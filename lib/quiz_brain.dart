@@ -16,7 +16,10 @@ class QuizBrain{
     a: false),
     Question (q: 'The total surface are of two human being lunga is approximately 70 square metres. ' ,a: true),
     Question (q: 'Google was originally called \"Backrub\" .' ,a: true),
+    Question (q: 'The Eiffel Tower is taller than the Statue of Liberty. '  ,a: true),
+    Question (q: 'The Great Barrier Reef is located in Australia. '  ,a: true),
     Question (q: 'Chocolate affects a dog\'s heart  and nervous system; a few ounces are enough to kill a small dog.' ,a: true),
+    Question (q: 'The currency of Japan is the Yuan.  '  ,a:false),
   ];
   void nextQuestion(){
     if(_questionNumber< _questionBank.length-1){
