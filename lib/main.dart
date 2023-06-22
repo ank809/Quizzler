@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 QuizBrain quizBrain= QuizBrain();
 void main(){
   runApp(MyApp());
@@ -33,10 +34,10 @@ class Quizzer extends StatefulWidget {
 class _QuizzerState extends State<Quizzer> {
   List<Icon> scorekeeper= [];
 
-  void checkAnswer(bool userAnswer){
+  void checkAnswer(){
     bool correctAnswer= quizBrain.getcorrectAnswer();
      setState(() {
-    if(userAnswer==correctAnswer){
+    if(correctAnswer){
      scorekeeper.add( Icon(Icons.check, color: Colors.green,));
               
     }
@@ -46,6 +47,34 @@ class _QuizzerState extends State<Quizzer> {
       quizBrain.nextQuestion();
     });
   }
+  void ifFinished() {
+  if (quizBrain.isFinished()) {
+    Alert(
+      context: context,
+      title: 'Quiz Finished',
+      desc: 'You have completed all the questions.',
+      buttons: [
+        DialogButton(
+          child: Text(
+            'Restart',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            setState(() {
+              quizBrain.reset();
+              scorekeeper.clear();
+            });
+            Navigator.pop(context); // Close the alert dialog
+          },
+        ),
+      ],
+    ).show();
+  } else {
+    checkAnswer();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,7 +97,7 @@ class _QuizzerState extends State<Quizzer> {
           ),
           Expanded(child: 
           TextButton(onPressed: (){
-            checkAnswer(true);
+            ifFinished();
           }, 
           child:
           Text('True', 
@@ -83,7 +112,7 @@ class _QuizzerState extends State<Quizzer> {
 
           Expanded(child: 
           TextButton(onPressed: (){
-            checkAnswer(false);
+            ifFinished();
           }, 
           child:
           Text('False', 
