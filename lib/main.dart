@@ -34,10 +34,10 @@ class Quizzer extends StatefulWidget {
 class _QuizzerState extends State<Quizzer> {
   List<Icon> scorekeeper= [];
 
-  void checkAnswer(){
+  void checkAnswer(bool userAnswer){
     bool correctAnswer= quizBrain.getcorrectAnswer();
      setState(() {
-    if(correctAnswer){
+    if(userAnswer==correctAnswer){
      scorekeeper.add( Icon(Icons.check, color: Colors.green,));
               
     }
@@ -47,32 +47,30 @@ class _QuizzerState extends State<Quizzer> {
       quizBrain.nextQuestion();
     });
   }
-  void ifFinished() {
-  if (quizBrain.isFinished()) {
-    Alert(
-      context: context,
-      title: 'Quiz Finished',
-      desc: 'You have completed all the questions.',
-      buttons: [
-        DialogButton(
-          child: Text(
-            'Restart',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+ void ifFinished() {
+    if (quizBrain.isFinished()) {
+      Alert(
+        context: context,
+        title: 'Quiz Finished',
+        desc: 'You have completed all the questions.',
+        buttons: [
+          DialogButton(
+            child: Text(
+              'Restart',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () {
+              setState(() {
+                quizBrain.reset();
+                scorekeeper.clear();
+              });
+              Navigator.pop(context); // Close the alert dialog
+            },
           ),
-          onPressed: () {
-            setState(() {
-              quizBrain.reset();
-              scorekeeper.clear();
-            });
-            Navigator.pop(context); // Close the alert dialog
-          },
-        ),
-      ],
-    ).show();
-  } else {
-    checkAnswer();
-    }
-  }
+        ],
+      ).show();
+  } 
+ }
 
 
   @override
@@ -97,6 +95,7 @@ class _QuizzerState extends State<Quizzer> {
           ),
           Expanded(child: 
           TextButton(onPressed: (){
+            checkAnswer(true);
             ifFinished();
           }, 
           child:
@@ -112,6 +111,7 @@ class _QuizzerState extends State<Quizzer> {
 
           Expanded(child: 
           TextButton(onPressed: (){
+            checkAnswer(false);
             ifFinished();
           }, 
           child:
