@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'questions.dart';
 import 'quiz_brain.dart';
+QuizBrain quizBrain= QuizBrain();
 void main(){
   runApp(MyApp());
 }
@@ -31,7 +31,21 @@ class Quizzer extends StatefulWidget {
 }
 
 class _QuizzerState extends State<Quizzer> {
-  int questionNumber=0;
+  List<Icon> scorekeeper= [];
+
+  void checkAnswer(bool userAnswer){
+    bool correctAnswer= quizBrain.getcorrectAnswer();
+     setState(() {
+    if(userAnswer==correctAnswer){
+     scorekeeper.add( Icon(Icons.check, color: Colors.green,));
+              
+    }
+    else{
+      scorekeeper.add( Icon(Icons.close, color: Colors.red,));
+    }
+      quizBrain.nextQuestion();
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,8 +59,7 @@ class _QuizzerState extends State<Quizzer> {
             child: Center(
               child: 
               Text(
-               // quiz_brain.getquestion(questionNumber)
-               'This is where text appears',
+                quizBrain.getquestionText(), 
               style: TextStyle(color: Colors.white,
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,),
@@ -54,7 +67,9 @@ class _QuizzerState extends State<Quizzer> {
             ),
           ),
           Expanded(child: 
-          TextButton(onPressed: (){}, 
+          TextButton(onPressed: (){
+            checkAnswer(true);
+          }, 
           child:
           Text('True', 
             style: TextStyle(color: Colors.white,
@@ -65,8 +80,11 @@ class _QuizzerState extends State<Quizzer> {
          )
           ),
           SizedBox(height: 14.0,),
+
           Expanded(child: 
-          TextButton(onPressed: (){}, 
+          TextButton(onPressed: (){
+            checkAnswer(false);
+          }, 
           child:
           Text('False', 
             style: TextStyle(color: Colors.white,
@@ -78,10 +96,7 @@ class _QuizzerState extends State<Quizzer> {
           ),
           SizedBox(height: 2.0,),
           Row(
-            children: [
-              Icon(Icons.cancel, color: Colors.red,),
-              Icon(Icons.check, color: Colors.green,),
-            ],
+            children: scorekeeper,
           ),
         ],
       ),
